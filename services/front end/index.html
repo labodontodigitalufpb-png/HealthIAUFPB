@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Health IA UFPB</title>
+  <style>
+    :root{
+      --bg1:#061a2e;
+      --bg2:#0b2b4a;
+      --card:#0f3b66cc;
+      --card2:#0b2f53cc;
+      --text:#eaf4ff;
+      --muted:#b9d7f3;
+      --accent:#33b4ff;
+      --accent2:#0ea5e9;
+      --danger:#ff4d4d;
+      --ok:#41d17d;
+      --border:#3a76a8;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(900px 450px at 15% 10%, #0d4b78 0%, transparent 60%),
+        radial-gradient(900px 450px at 85% 20%, #0a6bb0 0%, transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .app{
+      width:min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap:18px;
+    }
+
+    @media (max-width: 880px){
+      .app{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid color-mix(in oklab, var(--border) 70%, transparent);
+      border-radius:18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(600px 220px at 30% 0%, rgba(51,180,255,.18), transparent 60%);
+      pointer-events:none;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:14px;
+    }
+
+    /* ✅ LOGO AJUSTADA: não corta, mantém proporção e fica legível */
+  .logo{
+    width:140px;
+    height:140px;
+    border-radius:20px;
+    object-fit:contain;   /* NÃO corta a imagem */
+    background:#fff;  /* fundo branco para contraste */
+    padding:10px;        /* dá respiro ao logo */
+    filter: contrast(1.1) brightness(1.05)
+    border:1px solid rgba(255,255,255,.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+}
+
+
+}
+
+    }
+
+    h1{
+      font-size: 24px;
+      margin:0;
+      letter-spacing:.2px;
+      line-height:1.1;
+    }
+
+    .subtitle{
+      margin-top:6px;
+      font-size: 13.5px;
+      color: var(--muted);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:8px;
+      font-size:12px;
+      color:#dff2ff;
+      background: rgba(51,180,255,.12);
+      border: 1px solid rgba(51,180,255,.25);
+      padding:6px 10px;
+      border-radius:999px;
+      width: fit-content;
+    }
+
+    label{
+      display:block;
+      font-size: 13px;
+      color: var(--muted);
+      margin: 12px 0 8px;
+    }
+
+    textarea, input{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(185,215,243,.25);
+      background: rgba(3, 17, 32, .35);
+      color: var(--text);
+      padding: 12px 12px;
+      outline:none;
+      font-size: 14px;
+      transition: border-color .15s ease, transform .08s ease;
+    }
+
+    textarea:focus, input:focus{
+      border-color: rgba(51,180,255,.65);
+      box-shadow: 0 0 0 4px rgba(51,180,255,.12);
+    }
+
+    textarea{
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+      align-items:center;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 650;
+      cursor:pointer;
+      color: #06203a;
+      background: linear-gradient(180deg, #59c7ff, var(--accent2));
+      box-shadow: 0 12px 24px rgba(14,165,233,.25);
+      transition: transform .06s ease, filter .15s ease, opacity .15s ease;
+    }
+
+    .btn:hover{ filter: brightness(1.02); }
+    .btn:active{ transform: translateY(1px); }
+    .btn:disabled{
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:none;
+      font-weight: 600;
+    }
+
+    .hint{
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-top: 10px;
+      line-height:1.35;
+    }
+
+    .resultBox{
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(51,180,255,.25);
+      background: rgba(2, 20, 38, .38);
+      min-height: 150px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status{
+      font-size: 12.5px;
+      margin-top: 10px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: var(--muted);
+    }
+
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: rgba(185,215,243,.55);
+    }
+    .dot.ok{ background: var(--ok); }
+    .dot.err{ background: var(--danger); }
+    .dot.busy{ background: #ffd166; }
+
+    .sideTitle{
+      font-size: 15px;
+      margin: 4px 0 10px;
+      color:#eaf4ff;
+      letter-spacing:.2px;
+    }
+
+    .mini{
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height:1.4;
+    }
+
+    .kpi{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+
+    .tile{
+      padding:12px;
+      border-radius:14px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .tile b{
+      display:block;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color:#eaf4ff;
+    }
+
+    footer{
+      margin-top: 12px;
+      font-size: 12px;
+      color: rgba(185,215,243,.8);
+    }
+
+    code{
+      color:#dff2ff;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <!-- Painel principal -->
+    <section class="panel">
+      <header>
+        <!-- ✅ Coloque um arquivo logo.png na mesma pasta do index.html -->
+        <img class="logo" src="logo.jpg" alt="Logo LABODIGIT / UFPB">
+        <div>
+          <h1>Health IA UFPB</h1>
+          <div class="subtitle">Diagnóstico baseado nos sintomas</div>
+
+          <!-- ✅ Mensagem solicitada -->
+          <div class="badge">Modelo: <b>XGBoost</b> • Acurácia: <b>83,67%</b></div>
+
+          <div class="badge">API: <span id="apiBadge">http://127.0.0.1:8000</span></div>
+        </div>
+      </header>
+
+      <label for="apiBase">URL da API (se precisar mudar)</label>
+      <input id="apiBase" type="text" value="http://127.0.0.1:8000" />
+
+      <label for="sintomas">Sintomas (separe por vírgula ou em linhas)</label>
+      <textarea id="sintomas" placeholder="Ex.: febre, tosse, cansaço, dor de garganta"></textarea>
+
+      <div class="row">
+        <button id="btnDiagnosticar" class="btn">Gerar diagnóstico provável</button>
+        <button id="btnExemplo" class="btn btn-ghost" type="button">Preencher exemplo</button>
+        <button id="btnLimpar" class="btn btn-ghost" type="button">Limpar</button>
+      </div>
+
+      <div class="hint">
+        Dica: o backend costuma aceitar algo como <b>“febre,tosse,cansaço”</b>.  
+        Este frontend faz a conversão automaticamente e envia como query string.
+      </div>
+
+      <div class="status" id="statusLine">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Pronto.</span>
+      </div>
+
+      <label>Diagnóstico provável (saída)</label>
+      <div class="resultBox" id="resultado">—</div>
+
+      <footer>
+        UFPB • LABODIGIT • Health IA
+      </footer>
+    </section>
+
+    <!-- Painel lateral -->
+    <aside class="panel">
+      <div class="sideTitle">Como funciona</div>
+      <div class="mini">
+        1) Você informa os sintomas. <br/>
+        2) O sistema chama a API do Health IA. <br/>
+        3) A resposta aparece como “diagnóstico provável”.
+      </div>
+
+      <div class="kpi">
+        <div class="tile">
+          <b>Endpoint</b>
+          <div class="mini"><code>/sintomas/predict</code></div>
+        </div>
+        <div class="tile">
+          <b>Método</b>
+          <div class="mini"><code>GET</code> com query <code>sintomas</code></div>
+        </div>
+        <div class="tile">
+          <b>Entrada</b>
+          <div class="mini">texto → lista separada por vírgulas</div>
+        </div>
+        <div class="tile">
+          <b>Saída</b>
+          <div class="mini">JSON com diagnóstico e probabilidades</div>
+        </div>
+      </div>
+
+      <div class="hint" style="margin-top:14px">
+        Se der erro de CORS, confirme no FastAPI se você adicionou o middleware com
+        <code>allow_origins</code> para o endereço onde este front está rodando.
+      </div>
+
+      <div class="hint" style="margin-top:10px">
+        Se a logo não aparecer, verifique: <br/>
+        • o arquivo se chama <b>logo.png</b> <br/>
+        • está na mesma pasta do <b>index.html</b> <br/>
+        • você abriu o front via servidor (Live Server / Vite / etc.)
+      </div>
+    </aside>
+  </main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  const apiBase = $("apiBase");
+  const apiBadge = $("apiBadge");
+  const sintomas = $("sintomas");
+  const resultado = $("resultado");
+  const btn = $("btnDiagnosticar");
+  const btnExemplo = $("btnExemplo");
+  const btnLimpar = $("btnLimpar");
+  const statusDot = $("statusDot");
+  const statusText = $("statusText");
+
+  function setStatus(type, text){
+    statusDot.className = "dot";
+    if(type === "ok") statusDot.classList.add("ok");
+    if(type === "err") statusDot.classList.add("err");
+    if(type === "busy") statusDot.classList.add("busy");
+    statusText.textContent = text;
+  }
+
+  function normalizeSymptoms(raw){
+    // aceita vírgulas, ponto-e-vírgula e quebras de linha
+    return raw
+      .split(/[,;\n]/g)
+      .map(s => s.trim())
+      .filter(Boolean)
+      .join(",");
+  }
+
+  apiBase.addEventListener("input", () => {
+    apiBadge.textContent = apiBase.value.trim() || "(vazio)";
+  });
+
+  btnExemplo.addEventListener("click", () => {
+    sintomas.value = "febre, tosse, dor de garganta\ncansaço";
+    sintomas.focus();
+  });
+
+  btnLimpar.addEventListener("click", () => {
+    sintomas.value = "";
+    resultado.textContent = "—";
+    setStatus("", "Pronto.");
+  });
+
+  btn.addEventListener("click", async () => {
+    const base = (apiBase.value || "").trim().replace(/\/+$/,"");
+    const raw = sintomas.value || "";
+    const s = normalizeSymptoms(raw);
+
+    if(!base){
+      setStatus("err", "Informe a URL da API.");
+      return;
+    }
+    if(!s){
+      setStatus("err", "Informe pelo menos um sintoma.");
+      return;
+    }
+
+    // Mantém compatibilidade com /sintomas/predict e /sintomas/predict/
+    const url = `${base}/sintomas/predict?sintomas=${encodeURIComponent(s)}`;
+
+    btn.disabled = true;
+    resultado.textContent = "Consultando a API...";
+    setStatus("busy", "Processando...");
+
+    try{
+      const res = await fetch(url, { method: "GET" });
+
+      if(!res.ok){
+        const body = await res.text().catch(() => "");
+        throw new Error(`HTTP ${res.status} — ${body || "sem detalhes"}`);
+      }
+
+      const contentType = res.headers.get("content-type") || "";
+      if(contentType.includes("application/json")){
+        const data = await res.json();
+       if (data && data.top2 && Array.isArray(data.top2)) {
+  const linhas = data.top2.map((it, idx) =>
+    `${idx + 1}) ${it.doenca} — ${it.prob_percent}%`
+  ).join("\n");
+
+  resultado.textContent =
+    `Diagnóstico provável: ${data.diagnostico_provavel}\n\n` +
+    `Top 2 hipóteses:\n${linhas}\n\n` +
+    `Modelo: ${data.modelo} | Acurácia: ${data.acuracia_modelo}%`;
+} else {
+  resultado.textContent = JSON.stringify(data, null, 2);
+}
+
+      } else {
+        const data = await res.text();
+        resultado.textContent = data;
+      }
+
+      setStatus("ok", "Concluído.");
+    }catch(err){
+      console.error(err);
+      resultado.textContent =
+        "Erro ao consultar a API.\n\n" +
+        "Confira se o backend está rodando e acessível na URL informada.\n" +
+        "Detalhes: " + (err?.message || err);
+
+      setStatus("err", "Falha na requisição.");
+    }finally{
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
