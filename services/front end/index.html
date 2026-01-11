@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Health IA UFPB</title>
+
   <style>
     :root{
       --bg1:#061a2e;
@@ -20,6 +21,7 @@
     }
 
     *{ box-sizing:border-box; }
+
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
@@ -35,15 +37,12 @@
       padding:24px;
     }
 
+    /* agora é 1 coluna (sem painel lateral) */
     .app{
       width:min(980px, 100%);
       display:grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1fr;
       gap:18px;
-    }
-
-    @media (max-width: 880px){
-      .app{ grid-template-columns: 1fr; }
     }
 
     .panel{
@@ -71,26 +70,22 @@
       margin-bottom:14px;
     }
 
-    /* ✅ LOGO AJUSTADA: não corta, mantém proporção e fica legível */
-  .logo{
-    width:140px;
-    height:140px;
-    border-radius:20px;
-    object-fit:contain;   /* NÃO corta a imagem */
-    background:#fff;  /* fundo branco para contraste */
-    padding:10px;        /* dá respiro ao logo */
-    filter: contrast(1.1) brightness(1.05)
-    border:1px solid rgba(255,255,255,.25);
-    box-shadow: 0 4px 12px rgba(0,0,0,.25);
-}
-
-
-}
-
+    /* Logo grande no desktop */
+    .logo{
+      width:140px;
+      height:140px;
+      border-radius:22px;
+      object-fit:contain;
+      background:#fff;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.25);
+      box-shadow: 0 4px 12px rgba(0,0,0,.25);
+      filter: contrast(1.1) brightness(1.05);
+      flex: 0 0 auto;
     }
 
     h1{
-      font-size: 24px;
+      font-size: 26px;
       margin:0;
       letter-spacing:.2px;
       line-height:1.1;
@@ -102,11 +97,17 @@
       color: var(--muted);
     }
 
+    .badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
     .badge{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      margin-top:8px;
       font-size:12px;
       color:#dff2ff;
       background: rgba(51,180,255,.12);
@@ -132,7 +133,7 @@
       padding: 12px 12px;
       outline:none;
       font-size: 14px;
-      transition: border-color .15s ease, transform .08s ease;
+      transition: border-color .15s ease;
     }
 
     textarea:focus, input:focus{
@@ -168,10 +169,7 @@
 
     .btn:hover{ filter: brightness(1.02); }
     .btn:active{ transform: translateY(1px); }
-    .btn:disabled{
-      opacity:.6;
-      cursor:not-allowed;
-    }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; }
 
     .btn-ghost{
       background: rgba(255,255,255,.08);
@@ -179,24 +177,6 @@
       border:1px solid rgba(255,255,255,.12);
       box-shadow:none;
       font-weight: 600;
-    }
-
-    .hint{
-      font-size: 12.5px;
-      color: var(--muted);
-      margin-top: 10px;
-      line-height:1.35;
-    }
-
-    .resultBox{
-      margin-top: 10px;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(51,180,255,.25);
-      background: rgba(2, 20, 38, .38);
-      min-height: 150px;
-      white-space: pre-wrap;
-      word-break: break-word;
     }
 
     .status{
@@ -216,38 +196,15 @@
     .dot.err{ background: var(--danger); }
     .dot.busy{ background: #ffd166; }
 
-    .sideTitle{
-      font-size: 15px;
-      margin: 4px 0 10px;
-      color:#eaf4ff;
-      letter-spacing:.2px;
-    }
-
-    .mini{
-      font-size: 12.5px;
-      color: var(--muted);
-      line-height:1.4;
-    }
-
-    .kpi{
-      margin-top: 14px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-
-    .tile{
-      padding:12px;
-      border-radius:14px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
-    }
-
-    .tile b{
-      display:block;
-      font-size: 13px;
-      margin-bottom: 6px;
-      color:#eaf4ff;
+    .resultBox{
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(51,180,255,.25);
+      background: rgba(2, 20, 38, .38);
+      min-height: 150px;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     footer{
@@ -256,33 +213,56 @@
       color: rgba(185,215,243,.8);
     }
 
-    code{
-      color:#dff2ff;
+    /* ====== RESPONSIVO ====== */
+    @media (max-width: 880px){
+      body{ padding: 14px; }
+      .panel{ padding: 14px; border-radius: 16px; }
+      header{ gap: 12px; }
+      h1{ font-size: 22px; }
+      .logo{ width: 110px; height: 110px; }
+    }
+
+    @media (max-width: 520px){
+      header{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .logo{
+        width: 96px;
+        height: 96px;
+        border-radius: 18px;
+      }
+      .row{
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn{
+        width: 100%;
+      }
     }
   </style>
 </head>
 
 <body>
   <main class="app">
-    <!-- Painel principal -->
     <section class="panel">
       <header>
-        <!-- ✅ Coloque um arquivo logo.png na mesma pasta do index.html -->
-        <img class="logo" src="logo.jpg" alt="Logo LABODIGIT / UFPB">
+        <!-- IMPORTANTE: logo.jpg deve estar na mesma pasta do index.html -->
+        <img class="logo" src="./logo.jpg" alt="Logo LABODIGIT / UFPB" />
+
         <div>
           <h1>Health IA UFPB</h1>
           <div class="subtitle">Diagnóstico baseado nos sintomas</div>
 
-          <!-- ✅ Mensagem solicitada -->
-          <div class="badge">Modelo: <b>XGBoost</b> • Acurácia: <b>83,67%</b></div>
-
-          <div class="badge">API: <span id="apiBadge">http://127.0.0.1:8000</span></div>
+          <div class="badges">
+            <div class="badge">Modelo: <b>XGBoost</b> • Acurácia: <b>83,67%</b></div>
+            <div class="badge">API: <span id="apiBadge">https://healthiaufpb.onrender.com</span></div>
+          </div>
         </div>
       </header>
 
       <label for="apiBase">URL da API</label>
-      <input id="apiBase" type="hidden" value="https://healthiaufpb.onrender.com" />
-
+      <input id="apiBase" type="text" value="https://healthiaufpb.onrender.com" />
 
       <label for="sintomas">Sintomas (separe por vírgula ou em linhas)</label>
       <textarea id="sintomas" placeholder="Ex.: febre, tosse, cansaço, dor de garganta"></textarea>
@@ -291,11 +271,6 @@
         <button id="btnDiagnosticar" class="btn">Gerar diagnóstico provável</button>
         <button id="btnExemplo" class="btn btn-ghost" type="button">Preencher exemplo</button>
         <button id="btnLimpar" class="btn btn-ghost" type="button">Limpar</button>
-      </div>
-
-      <div class="hint">
-        Dica: o backend costuma aceitar algo como <b>“febre,tosse,cansaço”</b>.  
-        Este frontend faz a conversão automaticamente e envia como query string.
       </div>
 
       <div class="status" id="statusLine">
@@ -310,157 +285,118 @@
         UFPB • LABODIGIT • Health IA
       </footer>
     </section>
-
-    <!-- Painel lateral -->
-    <aside class="panel">
-      <div class="sideTitle">Como funciona</div>
-      <div class="mini">
-        1) Você informa os sintomas. <br/>
-        2) O sistema chama a API do Health IA. <br/>
-        3) A resposta aparece como “diagnóstico provável”.
-      </div>
-
-      <div class="kpi">
-        <div class="tile">
-          <b>Endpoint</b>
-          <div class="mini"><code>/sintomas/predict</code></div>
-        </div>
-        <div class="tile">
-          <b>Método</b>
-          <div class="mini"><code>GET</code> com query <code>sintomas</code></div>
-        </div>
-        <div class="tile">
-          <b>Entrada</b>
-          <div class="mini">texto → lista separada por vírgulas</div>
-        </div>
-        <div class="tile">
-          <b>Saída</b>
-          <div class="mini">JSON com diagnóstico e probabilidades</div>
-        </div>
-      </div>
-
-      <div class="hint" style="margin-top:14px">
-        Se der erro de CORS, confirme no FastAPI se você adicionou o middleware com
-        <code>allow_origins</code> para o endereço onde este front está rodando.
-      </div>
-
-      <div class="hint" style="margin-top:10px">
-        Se a logo não aparecer, verifique: <br/>
-        • o arquivo se chama <b>logo.png</b> <br/>
-        • está na mesma pasta do <b>index.html</b> <br/>
-        • você abriu o front via servidor (Live Server / Vite / etc.)
-      </div>
-    </aside>
   </main>
 
-<script>
-  const $ = (id) => document.getElementById(id);
+  <script>
+    const $ = (id) => document.getElementById(id);
 
-  const apiBase = $("apiBase");
-  const apiBadge = $("apiBadge");
-  const sintomas = $("sintomas");
-  const resultado = $("resultado");
-  const btn = $("btnDiagnosticar");
-  const btnExemplo = $("btnExemplo");
-  const btnLimpar = $("btnLimpar");
-  const statusDot = $("statusDot");
-  const statusText = $("statusText");
+    const apiBase = $("apiBase");
+    const apiBadge = $("apiBadge");
+    const sintomas = $("sintomas");
+    const resultado = $("resultado");
+    const btn = $("btnDiagnosticar");
+    const btnExemplo = $("btnExemplo");
+    const btnLimpar = $("btnLimpar");
+    const statusDot = $("statusDot");
+    const statusText = $("statusText");
 
-  function setStatus(type, text){
-    statusDot.className = "dot";
-    if(type === "ok") statusDot.classList.add("ok");
-    if(type === "err") statusDot.classList.add("err");
-    if(type === "busy") statusDot.classList.add("busy");
-    statusText.textContent = text;
-  }
-
-  function normalizeSymptoms(raw){
-    // aceita vírgulas, ponto-e-vírgula e quebras de linha
-    return raw
-      .split(/[,;\n]/g)
-      .map(s => s.trim())
-      .filter(Boolean)
-      .join(",");
-  }
-
-  apiBase.addEventListener("input", () => {
-    apiBadge.textContent = apiBase.value.trim() || "(vazio)";
-  });
-
-  btnExemplo.addEventListener("click", () => {
-    sintomas.value = "febre, tosse, dor de garganta\ncansaço";
-    sintomas.focus();
-  });
-
-  btnLimpar.addEventListener("click", () => {
-    sintomas.value = "";
-    resultado.textContent = "—";
-    setStatus("", "Pronto.");
-  });
-
-  btn.addEventListener("click", async () => {
-    const base = (apiBase.value || "").trim().replace(/\/+$/,"");
-    const raw = sintomas.value || "";
-    const s = normalizeSymptoms(raw);
-
-    if(!base){
-      setStatus("err", "Informe a URL da API.");
-      return;
-    }
-    if(!s){
-      setStatus("err", "Informe pelo menos um sintoma.");
-      return;
+    function setStatus(type, text){
+      statusDot.className = "dot";
+      if(type === "ok") statusDot.classList.add("ok");
+      if(type === "err") statusDot.classList.add("err");
+      if(type === "busy") statusDot.classList.add("busy");
+      statusText.textContent = text;
     }
 
-    // Mantém compatibilidade com /sintomas/predict e /sintomas/predict/
-    const url = `${base}/sintomas/predict?sintomas=${encodeURIComponent(s)}`;
+    function normalizeSymptoms(raw){
+      return raw
+        .split(/[,;\n]/g)
+        .map(s => s.trim())
+        .filter(Boolean)
+        .join(",");
+    }
 
-    btn.disabled = true;
-    resultado.textContent = "Consultando a API...";
-    setStatus("busy", "Processando...");
+    apiBase.addEventListener("input", () => {
+      apiBadge.textContent = apiBase.value.trim() || "(vazio)";
+    });
 
-    try{
-      const res = await fetch(url, { method: "GET" });
+    btnExemplo.addEventListener("click", () => {
+      sintomas.value = "febre, tosse, dor de garganta\ncansaço";
+      sintomas.focus();
+    });
 
-      if(!res.ok){
-        const body = await res.text().catch(() => "");
-        throw new Error(`HTTP ${res.status} — ${body || "sem detalhes"}`);
+    btnLimpar.addEventListener("click", () => {
+      sintomas.value = "";
+      resultado.textContent = "—";
+      setStatus("", "Pronto.");
+    });
+
+    btn.addEventListener("click", async () => {
+      const base = (apiBase.value || "").trim().replace(/\/+$/,"");
+      const raw = sintomas.value || "";
+      const s = normalizeSymptoms(raw);
+
+      if(!base){
+        setStatus("err", "Informe a URL da API.");
+        return;
+      }
+      if(!s){
+        setStatus("err", "Informe pelo menos um sintoma.");
+        return;
       }
 
-      const contentType = res.headers.get("content-type") || "";
-      if(contentType.includes("application/json")){
-        const data = await res.json();
-       if (data && data.top2 && Array.isArray(data.top2)) {
-  const linhas = data.top2.map((it, idx) =>
-    `${idx + 1}) ${it.doenca} — ${it.prob_percent}%`
-  ).join("\n");
+      // IMPORTANTE: no Render seu endpoint deve existir assim:
+      // /sintomas/predict?sintomas=...
+      const url = `${base}/sintomas/predict?sintomas=${encodeURIComponent(s)}`;
 
-  resultado.textContent =
-    `Diagnóstico provável: ${data.diagnostico_provavel}\n\n` +
-    `Top 2 hipóteses:\n${linhas}\n\n` +
-    `Modelo: ${data.modelo} | Acurácia: ${data.acuracia_modelo}%`;
-} else {
-  resultado.textContent = JSON.stringify(data, null, 2);
-}
+      btn.disabled = true;
+      resultado.textContent = "Consultando a API...";
+      setStatus("busy", "Processando...");
 
-      } else {
-        const data = await res.text();
-        resultado.textContent = data;
+      try{
+        const res = await fetch(url, { method: "GET" });
+
+        if(!res.ok){
+          const body = await res.text().catch(() => "");
+          throw new Error(`HTTP ${res.status} — ${body || "sem detalhes"}`);
+        }
+
+        const contentType = res.headers.get("content-type") || "";
+        let data;
+        if(contentType.includes("application/json")){
+          data = await res.json();
+
+          // Mostra top2 formatado se existir
+          if (data && data.top2 && Array.isArray(data.top2)) {
+            const linhas = data.top2.map((it, idx) =>
+              `${idx + 1}) ${it.doenca} — ${it.prob_percent}%`
+            ).join("\\n");
+
+            resultado.textContent =
+              `Diagnóstico provável: ${data.diagnostico_provavel}\\n\\n` +
+              `Top 2 hipóteses:\\n${linhas}`;
+          } else {
+            resultado.textContent = JSON.stringify(data, null, 2);
+          }
+
+        } else {
+          data = await res.text();
+          resultado.textContent = data;
+        }
+
+        setStatus("ok", "Concluído.");
+      }catch(err){
+        console.error(err);
+        resultado.textContent =
+          "Erro ao consultar a API.\\n\\n" +
+          "Confira se o backend está rodando e acessível na URL informada.\\n" +
+          "Detalhes: " + (err?.message || err);
+
+        setStatus("err", "Falha na requisição.");
+      }finally{
+        btn.disabled = false;
       }
-
-      setStatus("ok", "Concluído.");
-    }catch(err){
-      console.error(err);
-      resultado.textContent =
-        "Erro ao consultar a API.\n\n" +
-        "Confira se o backend está rodando e acessível na URL informada.\n" +
-        "Detalhes: " + (err?.message || err);
-
-      setStatus("err", "Falha na requisição.");
-    }finally{
-      btn.disabled = false;
-    }
-  });
-</script>
+    });
+  </script>
 </body>
 </html>
